@@ -1,13 +1,16 @@
 package swipe.card.recycler.view
 
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import swipe.card.recycler.view.data.MainRepository
+import swipe.card.recycler.view.databinding.RecyclerViewProfileItemBinding
 
 class ProfilesAdapter : RecyclerView.Adapter<ProfilesAdapter.ProfileViewHolder>() {
 
@@ -17,7 +20,7 @@ class ProfilesAdapter : RecyclerView.Adapter<ProfilesAdapter.ProfileViewHolder>(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ProfileViewHolder(
         DataBindingUtil.inflate(
             LayoutInflater.from(parent.context),
-            R.layout.recycler_view_profile,
+            R.layout.recycler_view_profile_item,
             parent,
             false
         )
@@ -52,6 +55,7 @@ class ProfilesAdapter : RecyclerView.Adapter<ProfilesAdapter.ProfileViewHolder>(
         holder.status.visibility = View.VISIBLE
         holder.status.text = "ACCEPTED"
         mainRepo.updateProfile("ACCEPTED", this.profiles[position].profileId)
+        Handler().postDelayed({ holder.cards.visibility = View.GONE }, 2000)
     }
 
     private fun onDeclineClick(
@@ -63,14 +67,16 @@ class ProfilesAdapter : RecyclerView.Adapter<ProfilesAdapter.ProfileViewHolder>(
         holder.status.visibility = View.VISIBLE
         holder.status.text = "REJECTED"
         mainRepo.updateProfile("REJECTED", this.profiles[position].profileId)
+        holder.cards.visibility = View.GONE
+        Handler().postDelayed({ holder.cards.visibility = View.GONE }, 2000)
     }
 
-    inner class ProfileViewHolder(val binding: RecyclerViewProfileBinding) :
+    inner class ProfileViewHolder(val binding: RecyclerViewProfileItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         var acceptButton: ImageView = binding.root.findViewById(R.id.acceptBtn) as ImageView
         var rejectButton: ImageView = binding.root.findViewById(R.id.rejectBtn) as ImageView
         var status: TextView = binding.root.findViewById(R.id.statusText) as TextView
-
+        var cards: CardView = binding.root.findViewById(R.id.main_card_view) as CardView
     }
 
 }

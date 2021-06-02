@@ -7,7 +7,7 @@ import retrofit2.http.GET
 
 interface ProfilesAPI {
 
-    @GET("?results=5")
+    @GET("?results=10")
     fun getProfiles(): Call<ResultResponse>
 
     companion object {
